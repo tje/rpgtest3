@@ -1,0 +1,27 @@
+{
+  "name": "rpgtest3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack",
+    "start": "concurrently --kill-others \"tsc --watch\" \"webpack --watch\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/lodash": "^4.14.87",
+    "@types/node": "^8.0.53",
+    "@types/shortid": "0.0.29",
+    "concurrently": "^3.5.1",
+    "ts-loader": "^3.5.0",
+    "typescript": "^2.6.2",
+    "webpack": "^3.10.0"
+  },
+  "dependencies": {
+    "lodash": "^4.17.4",
+    "shortid": "^2.2.8"
+  }
+}

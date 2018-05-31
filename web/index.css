@@ -1,0 +1,49 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+:root {
+  font-size: 26px;
+}
+
+#map {
+  position: relative;
+}
+
+#map .tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  background-clip: content-box;
+  border-right: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  transition: all 500ms linear;
+}
+
+#map .tile::before,
+#map .tile::after {
+  position: absolute;
+}
+
+#map .tile::before { z-index: 1; }
+#map .tile::after { transform: scale(1.5); }
+
+#map .tile.Floor { background-color: ghostwhite; }
+#map .tile.Tree::before { content: '🌳'; }
+#map .tile.Deer::before { content: '🦌'; }
+#map .tile.Wizard::before { content: '🧙'; }
+#map .tile.Fireball::before,
+#map .tile.Burning::after { content: '🔥'; }
+#map .tile.Train::before { content: '🚂'; }
+/*
+#map .tile.GraphicExample::before {
+  content: '';
+  width: 1em;
+  height: 1em;
+  background-image: url('tiles/example.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+*/
