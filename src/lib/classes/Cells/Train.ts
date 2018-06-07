@@ -2,9 +2,10 @@ import Projectile from './Projectile'
 import Creature from './Creature'
 import { Damage } from '../StatusEffects/Damage'
 import { TurnPhase } from '../../interfaces/ICell'
+import { ITrainData } from '../../interfaces/ITrain';
 import * as _ from 'lodash'
 
-export default class Train extends Projectile {
+export default class Train<C extends ITrainData> extends Projectile<C> {
   get defaults () {
     return Object.assign(super.defaults, {
       name: 'Train',

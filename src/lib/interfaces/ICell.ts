@@ -3,8 +3,6 @@ export interface ICellData {
   priority: number
   x: number
   y: number
-  trajectoryX: number
-  trajectoryY: number
   speed: number
   altitude: number
   solid: boolean
@@ -17,6 +15,8 @@ export const enum TurnPhase {
   Action = 'action',
   End = 'end'
 }
+
+export type TurnMethod = 'turnStart' | 'turnMove' | 'turnAction' | 'turnEnd'
 
 export interface ICell {
   turn: (phase: TurnPhase, tick: number) => void

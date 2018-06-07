@@ -1,5 +1,6 @@
 import Creature from '../Cells/Creature'
 import { Damage } from './Damage'
+import { IDamage } from '../../interfaces/IDamage';
 
 export class Burning extends Damage {
   name = 'Burning'
@@ -9,12 +10,12 @@ export class Burning extends Damage {
 
   constructor (
     protected amount: number,
-    protected damageType: string = 'fire'
+    protected damageType: keyof IDamage = 'fire'
   ) {
     super(amount, damageType)
   }
 
-  protected resolve (cell: Creature) {
+  protected resolve (cell: Creature<any>) {
     cell.applyDamage(this.amount, this.damageType, this)
     return true
   }

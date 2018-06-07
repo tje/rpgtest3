@@ -4,6 +4,7 @@ import {
 } from './StatusEffect'
 import { TurnPhase } from '../../interfaces/ICell'
 import Creature from '../Cells/Creature'
+import { IDamage } from '../../interfaces/IDamage';
 
 export class Damage extends Effect {
   name = 'Damage'
@@ -14,12 +15,12 @@ export class Damage extends Effect {
 
   constructor (
     protected amount: number,
-    protected damageType: string = 'physical'
+    protected damageType: keyof IDamage = 'physical'
   ) {
     super()
   }
 
-  protected resolve (cell: Creature) {
+  protected resolve (cell: Creature<any>) {
     cell.applyDamage(this.amount, this.damageType)
     return true
   }

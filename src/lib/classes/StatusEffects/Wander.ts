@@ -16,7 +16,7 @@ export class Wander extends Effect {
     super()
   }
 
-  protected resolve (cell: Creature) {
+  protected resolve (cell: Creature<any>) {
     if (this.elapsed % cell.get('speed') !== 0) {
       return false
     }

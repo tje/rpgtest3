@@ -3,7 +3,8 @@ import {
   ICell,
   ICellData,
   ICellProxyHandler,
-  TurnPhase
+  TurnPhase,
+  TurnMethod
 } from '../../interfaces/ICell'
 import * as StatusEffect from '../StatusEffects/StatusEffect'
 import Battlefield from '../Battlefield'
@@ -21,12 +22,12 @@ type CellChangeset = {
 export default abstract class Cell<C extends ICellData> implements ICell {
   id: string = shortid.generate()
   changes: CellChangeset[] = []
-  protected attributes: CellAttributes<C & ICellData>
+  protected attributes: C
   protected map?: Battlefield
 
-  constructor (attributes?: Partial<CellAttributes<C>>) {
-    const mergedDefaults = Object.assign(this.defaults, attributes || {})
-    this.attributes = <CellAttributes<C>>this.createProxy(<C>mergedDefaults)
+  constructor (attributes: Partial<C> = {}) {
+    const mergedDefaults = <C>Object.assign(this.defaults, attributes)
+    this.attributes = <C>this.createProxy(mergedDefaults)
     this.initialize(mergedDefaults)
   }
 
@@ -43,36 +44,38 @@ export default abstract class Cell<C extends ICellData> implements ICell {
     }
   }
 
-  createProxy<T extends ICellData> (
-    obj: T,
-    handler: ICellProxyHandler<T> = {
+  createProxy<C> (
+    obj: C & ICellData,
+    handler: ICellProxyHandler<C & ICellData> = {
       get: (target, property) => target[property],
       set: (target, property, value) => {
         target[property] = value
         return true
       }
     }
-  ): T & ICellData {
-    return new Proxy<T & ICellData>(obj, handler)
+  ): C & ICellData {
+    return new Proxy<C & ICellData>(obj, handler)
   }
 
-  get (prop: keyof C) {
+  get <K extends keyof C>(prop: K) {
     return this.attributes[prop]
   }
 
-  setMany (props: Partial<CellAttributes<C>>) {
+  setMany <T extends Partial<C>> (props: T) {
     Object.keys(props).forEach(prop => {
-      this.attributes[<keyof C>prop] = props[<keyof C>prop]
+      const propKey = <keyof C>prop
+      this.attributes[propKey] = <C[keyof C]>props[propKey]
     })
   }
 
-  set (props: keyof C | Partial<CellAttributes<C>>, value?: any) {
+  set <K extends keyof C> (props: K, value: C[K]): void
+  set (props: Partial<C>): void
+  set (props: any, value?: any) {
     if (typeof props === 'object' && value === undefined) {
-      const partialProps = <Partial<CellAttributes<C>>>props
       Object.keys(props).forEach(prop => {
         const propKey = <keyof C>prop
-        this.recordChange(propKey, partialProps[propKey])
-        this.attributes[propKey] = partialProps[propKey]
+        this.recordChange(propKey, props[propKey])
+        this.attributes[propKey] = props[propKey]
       })
     } else {
       this.recordChange(<keyof C>props, value)
@@ -136,7 +139,7 @@ export default abstract class Cell<C extends ICellData> implements ICell {
     this.set('statusEffects', effects)
   }
 
-  detachStatusEffect (effect: StatusEffect.Effect) {
+  detachStatusEffect (effect: StatusEffect.Effect | typeof StatusEffect.Effect) {
     let effects = <StatusEffect.Effect[]>this.get('statusEffects')
     effects = effects.filter(f => {
       if (typeof effect === 'function') {
@@ -160,7 +163,7 @@ export default abstract class Cell<C extends ICellData> implements ICell {
   }
 
   turn (phase: TurnPhase, tick: number): void {
-    const fn = `turn${phase.substr(0, 1).toUpperCase()}${phase.substr(1)}`
+    const fn = <TurnMethod>`turn${phase.substr(0, 1).toUpperCase()}${phase.substr(1)}`
     
     this.iterateStatusEffects(phase, StatusEffect.Fixture.Pre)
     this[fn](tick)

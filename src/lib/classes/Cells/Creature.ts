@@ -1,9 +1,10 @@
 import Cell from './Cell'
 import * as StatusEffect from '../StatusEffects/StatusEffect'
 import { ICreatureData } from '../../interfaces/ICreature'
+import { IDamage } from '../../interfaces/IDamage'
 
-class Creature extends Cell<ICreatureData> {
-  get defaults (): ICreatureData {
+class Creature<C extends ICreatureData> extends Cell<C> {
+  get defaults (): C | ICreatureData {
     return Object.assign(super.defaults, {
       name: 'Monster',
       priority: 5,
@@ -61,10 +62,11 @@ class Creature extends Cell<ICreatureData> {
       ({ x, y } = this.relativeToAbsolute(x, y))
     }
 
-    this.set({ x, y })
+    const xy  = <C>{ x, y }
+    this.set(xy)
   }
 
-  applyDamage (amount: number, type: string, source?: any) {
+  applyDamage (amount: number, type: keyof IDamage, source?: any) {
     const resistance = this.get('resistance')[type]
     const hp = this.get('health')
     this.set('health', hp - (amount - resistance))

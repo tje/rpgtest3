@@ -1,5 +1,5 @@
 import Cell from './Cell'
-import { IFloorData } from '../interfaces/IFloor'
+import { IFloorData } from '../../interfaces/IFloor'
 
 export default class Floor extends Cell<IFloorData> {
   get defaults (): IFloorData {

@@ -9,7 +9,7 @@ export class Escaping extends Wander {
     super(threshold)
   }
 
-  resolve (cell: Creature) {
+  resolve (cell: Creature<any>) {
     if (this.elapsed % cell.get('speed') !== 0) {
       return false
     }

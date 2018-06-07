@@ -2,8 +2,9 @@ import Creature from './Creature'
 import Fireball from './Fireball'
 import { TurnPhase } from '../../interfaces/ICell'
 import { Wander } from '../StatusEffects/Wander'
+import { ICreatureData } from '../../interfaces/ICreature';
 
-export default class Wizard extends Creature {
+export default class Wizard<C extends ICreatureData> extends Creature<C> {
   get defaults () {
     return Object.assign(super.defaults, {
       name: 'Wizard',

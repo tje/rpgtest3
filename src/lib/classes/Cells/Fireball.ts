@@ -1,8 +1,9 @@
 import Projectile from './Projectile'
 import Creature from './Creature'
 import { Damage } from '../StatusEffects/Damage'
+import { IProjectileData } from '../../interfaces/IProjectile';
 
-export default class Fireball extends Projectile {
+export default class Fireball<C extends IProjectileData> extends Projectile<C> {
   get defaults () {
     return Object.assign(super.defaults, {
       name: 'Fireball',

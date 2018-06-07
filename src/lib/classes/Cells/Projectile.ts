@@ -1,8 +1,9 @@
+import Cell from './Cell'
 import Creature from './Creature'
 import { IProjectileData } from '../../interfaces/IProjectile'
 // import { Wandering } from '../StatusEffects/StatusEffect'
 
-export default class Projectile extends Creature {
+export default class Projectile<C extends IProjectileData> extends Creature<C> {
   get defaults (): IProjectileData {
     return Object.assign(super.defaults, {
       name: 'Projectile',
@@ -14,7 +15,7 @@ export default class Projectile extends Creature {
     })
   }
 
-  turnMove () {
+  turnMove (tick: number) {
     if (this.map === undefined) {
       return
     }

@@ -26,7 +26,7 @@ export default class Battlefield extends EventEmitter implements IBattlefield {
     }
   }
 
-  getCells (criteria: object = {}): ValidCell[] {
+  getCells (criteria: any = {}): ValidCell[] {
     return _.filter(Array.from(this.cells), cell => {
       for (const prop of Object.keys(criteria)) {
         if (cell.get(prop) !== criteria[prop]) {
